@@ -32,11 +32,11 @@ jobs:
           closed-issues-label: "invalid"
 
       - name: Generate Summary
-        run: .github/moderation/issue_summary.js
+        run: node .github/moderation/issue_summary.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check Banned Terms
-        run: .github/moderation/banned_terms.js
+        run: node .github/moderation/banned_terms.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
