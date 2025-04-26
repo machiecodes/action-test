@@ -1,20 +1,21 @@
 import * as github from '@actions/github';
 import * as core from '@actions/core';
 
-const clientTerms = [
+const otherModTerms = [
     "feather",
     "lunar",
     "labymod",
     "tlauncher",
     "pojav",
-    "boze",
-    "mio",
-    "future",
+    "optifine",
+    "optifabric",
     "wurst",
-    "optifine"
+    "origins"
 ];
 
 const anticheatTerms = [
+    "matrix",
+    "disabler",
     "bypass",
     "ncp",
     "nocheat plus",
@@ -43,40 +44,32 @@ const token = process.env.GITHUB_TOKEN;
 const octokit = github.getOctokit(token);
 const context = github.context
 
-const issueNumber = context.payload.issue.number;
-const owner = context.repo.owner;
-const repo = context.repo.repo;
 const title = context.payload.issue.title;
 const body = context.payload.issue.body;
 
 async function run() {
     const issueText = `${title} ${body}`.toLowerCase();
 
-    for (const term of clientTerms) {
+    for (const term of otherModTerms) {
         if (!checkTerm(issueText, term)) continue;
 
-        const clientMessage =
-            `### This issue is being automatically closed because it may mention a third-party client (${term}).\n` +
-            'Meteor only supports Fabric via Prism Launcher and the Vanilla Launcher. Any problems you encounter ' +
-            'while using other clients are your responsibility to troubleshoot.\n' +
-            '\n' +
-            '_If you believe this issue was closed wrongly, you may reopen it._'
+        const otherModMessage =
+            'Meteor does not offer support for "legit clients" like Lunar or Feather, or for launchers that ' +
+            'support cracked accounts or work on non-desktop devices. The mod likely won\' run in tandem with ' +
+            'them, and if you experience any issues while doing so you must troubleshoot any issues yourself.'
 
-        await closeIssue(term, clientMessage);
+        await closeIssue(otherModMessage, octokit, context, term);
         return;
     }
 
     for (const term of anticheatTerms) {
         if (!checkTerm(issueText, term)) continue;
 
-        const clientMessage =
-            `### This issue is being automatically closed because it may mention issues with anticheats (${term}).\n` +
-            'Meteor is intended to be used only as a utility client on servers that allow it, we do not intend to ' +
-            'add workarounds for specific anticheats unless it falls in that scope.\n' +
-            '\n' +
-            '_If you believe this issue was closed wrongly, you may reopen it._'
+        const anticheatMessage =
+            'Meteor is intended to be used as a utility client on servers that explicitly allow its use. ' +
+            'We do not intend to add workarounds for specific anticheats unless it falls within that scope.'
 
-        await closeIssue(term, clientMessage);
+        await closeIssue(anticheatMessage, octokit, context, term);
         return;
     }
 
@@ -84,36 +77,29 @@ async function run() {
         if (!checkTerm(issueText, term)) continue;
 
         const featureMessage =
-            `### This issue is being automatically closed because it may request this feature: (${term}).\n` +
-            'This feature is likely impossible to make, associated with cheating/griefing, or falls outside ' +
-            'the scope of this project. We do not plan on adding this feature.\n' +
-            '\n' +
-            '_If you believe this issue was closed wrongly, you may reopen it._'
+            'This feature is either impossible to make, associated with cheating/griefing, or falls outside ' +
+            'the scope of this project. We do not plan on adding this feature.'
 
-        await closeIssue(term, featureMessage);
+        await closeIssue(featureMessage, octokit, context, term);
         return;
     }
 
     if (checkTerm(issueText, "old version")) {
         const oldVersionMessage =
-            `### This issue is being automatically closed because it may mention old versions.\n` +
-            'Old versions of Meteor can be found at https://meteorclient.com/archive, but you will' +
-            'not receive support for any issues you encounter while using them.\n' +
-            '\n' +
-            '_If you believe this issue was closed wrongly, you may reopen it._'
+            'Our [archive page](https://www.meteorclient.com/archive) stores major Meteor versions for Minecraft ' +
+            'versions starting at 1.21.4. If you wish to use older builds on older versions of Minecraft, you will ' +
+            'need to build them yourself. **You will not receive support for issues with old versions of Meteor!**'
 
-        await closeIssue("old version", oldVersionMessage);
+        await closeIssue(oldVersionMessage, octokit, context, "old version");
         return;
     }
 
     if (checkTerm(issueText, "forge")) {
-        const oldVersionMessage =
-            `### This issue is being automatically closed because it may request a Forge port.\n` +
-            'Meteor is a Fabric only mod and has no plans to port to Forge.\n' +
-            '\n' +
-            '_If you believe this issue was closed wrongly, you may reopen it._'
+        const forgeMessage =
+            'Porting Meteor to Forge would take a great amount of time and effort, and would require rewriting major ' +
+            'parts of the client to accommodate different APIs. Meteor does not plan to port to Forge in the future.'
 
-        await closeIssue("forge", oldVersionMessage);
+        await closeIssue(forgeMessage, octokit, context, "forge");
     }
 }
 
