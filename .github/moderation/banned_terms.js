@@ -2,16 +2,16 @@ import * as github from '@actions/github';
 import * as core from '@actions/core';
 
 const clientTerms = [
-    "feather client",
-    "lunar client",
+    "feather",
+    "lunar",
     "labymod",
     "tlauncher",
     "pojav",
     "boze",
     "liquid bounce",
-    "mio client",
-    "future client",
-    "wurst client",
+    "mio",
+    "future",
+    "wurst",
     "optifine"
 ];
 
@@ -54,7 +54,7 @@ async function run() {
     const issueText = `${title} ${body}`.toLowerCase();
 
     for (const term of clientTerms) {
-        if (checkTerm(issueText, term)) continue;
+        if (!checkTerm(issueText, term)) continue;
 
         const clientMessage =
             `### This issue is being automatically closed because it may mention a third-party client (${term}).\n` +
@@ -68,7 +68,7 @@ async function run() {
     }
 
     for (const term of anticheatTerms) {
-        if (checkTerm(issueText, term)) continue;
+        if (!checkTerm(issueText, term)) continue;
 
         const clientMessage =
             `### This issue is being automatically closed because it may mention issues with anticheats (${term}).\n` +
@@ -82,7 +82,7 @@ async function run() {
     }
 
     for (const term of featureTerms) {
-        if (checkTerm(issueText, term)) continue;
+        if (!checkTerm(issueText, term)) continue;
 
         const featureMessage =
             `### This issue is being automatically closed because it may request this feature: (${term}).\n` +
@@ -95,7 +95,7 @@ async function run() {
         return;
     }
 
-    if (checkTerm(issueText, "old version")) {
+    if (!checkTerm(issueText, "old version")) {
         const oldVersionMessage =
             `### This issue is being automatically closed because it may mention old versions.\n` +
             'Old versions of Meteor can be found at https://meteorclient.com/archive, but you will' +
@@ -107,7 +107,7 @@ async function run() {
         return;
     }
 
-    if (checkTerm(issueText, "forge")) {
+    if (!checkTerm(issueText, "forge")) {
         const oldVersionMessage =
             `### This issue is being automatically closed because it may request a Forge port.\n` +
             'Meteor is a Fabric only mod and has no plans to port to Forge.\n' +
