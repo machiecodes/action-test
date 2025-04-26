@@ -23,12 +23,12 @@ jobs:
         working-directory: ./.github/moderation
         run: npm install
 
-      - name: Check Banned Terms
-        run: .github/moderation/banned_terms.js
+      - name: Generate Summary
+        run: .github/moderation/issue_summary.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate Summary
-        run: .github/moderation/issue_summary.js
+      - name: Check Banned Terms
+        run: .github/moderation/banned_terms.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
