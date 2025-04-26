@@ -8,6 +8,10 @@ jobs:
   issue-moderator:
     runs-on: ubuntu-latest
 
+    permissions:
+      issues: write
+      contents: read
+
     steps:
       - name: Check Out Repository
         uses: actions/checkout@v4
