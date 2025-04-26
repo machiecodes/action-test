@@ -8,7 +8,6 @@ const clientTerms = [
     "tlauncher",
     "pojav",
     "boze",
-    "liquid bounce",
     "mio",
     "future",
     "wurst",
@@ -95,7 +94,7 @@ async function run() {
         return;
     }
 
-    if (!checkTerm(issueText, "old version")) {
+    if (checkTerm(issueText, "old version")) {
         const oldVersionMessage =
             `### This issue is being automatically closed because it may mention old versions.\n` +
             'Old versions of Meteor can be found at https://meteorclient.com/archive, but you will' +
@@ -107,7 +106,7 @@ async function run() {
         return;
     }
 
-    if (!checkTerm(issueText, "forge")) {
+    if (checkTerm(issueText, "forge")) {
         const oldVersionMessage =
             `### This issue is being automatically closed because it may request a Forge port.\n` +
             'Meteor is a Fabric only mod and has no plans to port to Forge.\n' +
