@@ -26,14 +26,6 @@ jobs:
       - name: Install Dependencies
         working-directory: ./.github/moderation
         run: npm install
-        
-      - name: Validate Template
-        uses: lucasbento/auto-close-issues@v1.0.2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-close-message: |
-            This issue is being automatically closed because it does not follow the issue template."
-          closed-issues-label: "invalid"
 
       - name: Generate Summary
         run: node .github/moderation/issue_summary.js
