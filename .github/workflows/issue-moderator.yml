@@ -2,7 +2,7 @@ name: Issue Automatic Actions
 
 on:
   issues:
-    types: [opened, edited]
+    types: [opened]
 
 jobs:
   issue-moderator:
