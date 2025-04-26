@@ -10,7 +10,9 @@ const clientTerms = [
     "boze",
     "liquid bounce",
     "mio client",
-    "future client"
+    "future client",
+    "wurst client",
+    "optifine"
 ];
 
 const anticheatTerms = [
@@ -34,7 +36,8 @@ const featureTerms = [
     "ping bypass",
     "tp aura",
     "force op",
-    ".panic"
+    ".panic",
+    "anti vanish"
 ];
 
 const token = process.env.GITHUB_TOKEN;
@@ -51,11 +54,11 @@ async function run() {
     const issueText = `${title} ${body}`.toLowerCase();
 
     for (const term of clientTerms) {
-        if (!issueText.includes(term)) continue;
+        if (checkTerm(issueText, term)) continue;
 
-        const clientMessage = `This issue is being automatically closed because it may mention a third-party client 
-        (${term}). Meteor only supports Fabric via Prism Launcher and the Vanilla Launcher. Any problems you encounter
-        while using other clients are your responsibility to troubleshoot.\n
+        const clientMessage = `This issue is being automatically closed because it may mention a third-party  
+        client (${term}). Meteor only supports Fabric via Prism Launcher and the Vanilla Launcher. Any problems 
+        you encounter while using other clients are your responsibility to troubleshoot.\n
         \n 
         If you believe this issue was closed wrongly, you may reopen it.`
 
@@ -64,7 +67,7 @@ async function run() {
     }
 
     for (const term of anticheatTerms) {
-        if (!issueText.includes(term)) continue;
+        if (checkTerm(issueText, term)) continue;
 
         const anticheatMessage = `This issue is being automatically closed because it may mention issues with 
         anticheat plugins (${term}). Meteor is intended to be used only as a utility client on servers that 
@@ -77,9 +80,9 @@ async function run() {
     }
 
     for (const term of featureTerms) {
-        if (!issueText.includes(term)) continue;
+        if (checkTerm(issueText, term)) continue;
 
-        const featureMessage = `This issue is being automatically closed because it may mention features that are
+        const featureMessage = `This issue is being automatically closed because it may mention request that are
         impossible to make, associated with cheating/griefing, or fall outside the scope of this project (${term}).\n
         \n
         If you believe this issue was closed wrongly, you may reopen it.`;
@@ -87,6 +90,28 @@ async function run() {
         await closeIssue(term, featureMessage);
         return;
     }
+
+    if (checkTerm(issueText, "old version")) {
+        const oldVersionMessage = `This issue is being automatically closed because it may request support for or
+        access to old versions of the client. Old versions can be found at https://meteorclient.com/archive, but 
+        you will not receive any support while using them.`;
+
+        await closeIssue("old version", oldVersionMessage);
+        return;
+    }
+
+    if (checkTerm(issueText, "forge")) {
+        const forgeMessage = `This issue is being automatically closed because it may request that Meteor be .
+        ported to Forge. Meteor is only a Fabric mod and does plan to be ported in the future. `;
+
+        await closeIssue("forge", forgeMessage);
+    }
+}
+
+function checkTerm(text, term) {
+    if (text.includes(term)) return true;
+    if (text.includes(term.replaceAll(' ', '-'))) return true;
+    return text.includes(term.replaceAll(' ', ''));
 }
 
 async function closeIssue(foundTerm, message) {
