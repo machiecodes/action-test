@@ -1,5 +1,5 @@
 import * as github from '@actions/github';
-import * as core from '@actions/core';
+import { closeIssue } from "./index.js";
 
 const otherModTerms = [
     "feather",
@@ -107,38 +107,6 @@ function checkTerm(text, term) {
     if (text.includes(term)) return true;
     if (text.includes(term.replaceAll(' ', '-'))) return true;
     return text.includes(term.replaceAll(' ', ''));
-}
-
-async function closeIssue(foundTerm, message) {
-    core.warning(`Found banned term ('${foundTerm}'), closing issue.`);
-
-    // IDE for whatever reason can't find the rest property yippee
-
-    try {
-        await octokit['rest'].issues.createComment({
-            owner,
-            repo,
-            issue_number: issueNumber,
-            body: message,
-        });
-
-        core.info('Comment added successfully.');
-    } catch (error) {
-        core.error(`Failed to add comment: ${error.message}`);
-    }
-
-    try {
-        await octokit['rest'].issues.update({
-            owner,
-            repo,
-            issue_number: issueNumber,
-            state: "closed",
-        });
-
-        core.info('Closed issue successfully.');
-    } catch (error) {
-        core.setFailed(`Failed to close issue: ${error.message}`);
-    }
 }
 
 run();
