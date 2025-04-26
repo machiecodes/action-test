@@ -94,7 +94,9 @@ async function run() {
     if (checkTerm(issueText, "old version")) {
         const oldVersionMessage = `This issue is being automatically closed because it may request support for or
         access to old versions of the client. Old versions can be found at https://meteorclient.com/archive, but 
-        you will not receive any support while using them.`;
+        you will not receive any support while using them.\n
+        \n
+        If you believe this issue was closed wrongly, you may reopen it.`;
 
         await closeIssue("old version", oldVersionMessage);
         return;
@@ -102,7 +104,9 @@ async function run() {
 
     if (checkTerm(issueText, "forge")) {
         const forgeMessage = `This issue is being automatically closed because it may request that Meteor be .
-        ported to Forge. Meteor is only a Fabric mod and does plan to be ported in the future. `;
+        ported to Forge. Meteor is only a Fabric mod and does plan to be ported in the future.\n
+        \n
+        If you believe this issue was closed wrongly, you may reopen it.`;
 
         await closeIssue("forge", forgeMessage);
     }
@@ -137,7 +141,7 @@ async function closeIssue(foundTerm, message) {
             owner,
             repo,
             issue_number: issueNumber,
-            state: 'closed',
+            state: "closed",
         });
 
         core.info('Closed issue successfully.');
