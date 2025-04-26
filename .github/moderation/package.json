@@ -1,0 +1,11 @@
+{
+  "name": "moderator",
+  "version": "1.0.0",
+  "author": "MachieCodes",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "banned_terms": "node get_number.js",
+    "issue_summary": "node issue_summary.js"
+  }
+}
