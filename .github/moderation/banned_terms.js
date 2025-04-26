@@ -56,11 +56,12 @@ async function run() {
     for (const term of clientTerms) {
         if (checkTerm(issueText, term)) continue;
 
-        const clientMessage = `This issue is being automatically closed because it may mention a third-party  
-        client (${term}). Meteor only supports Fabric via Prism Launcher and the Vanilla Launcher. Any problems 
-        you encounter while using other clients are your responsibility to troubleshoot.\n
-        \n 
-        If you believe this issue was closed wrongly, you may reopen it.`
+        const clientMessage =
+            `### This issue is being automatically closed because it may mention a third-party client (${term}).\n` +
+            'Meteor only supports Fabric via Prism Launcher and the Vanilla Launcher. Any problems you encounter ' +
+            'while using other clients are your responsibility to troubleshoot.\n' +
+            '\n' +
+            '_If you believe this issue was closed wrongly, you may reopen it._'
 
         await closeIssue(term, clientMessage);
         return;
@@ -69,46 +70,51 @@ async function run() {
     for (const term of anticheatTerms) {
         if (checkTerm(issueText, term)) continue;
 
-        const anticheatMessage = `This issue is being automatically closed because it may mention issues with 
-        anticheat plugins (${term}). Meteor is intended to be used only as a utility client on servers that 
-        allow it, we do not intend to add workarounds for specific anticheats unless it falls in that scope.\n
-        \n
-        If you believe this issue was closed wrongly, you may reopen it.`;
+        const clientMessage =
+            `### This issue is being automatically closed because it may mention issues with anticheats (${term}).\n` +
+            'Meteor is intended to be used only as a utility client on servers that allow it, we do not intend to ' +
+            'add workarounds for specific anticheats unless it falls in that scope.\n' +
+            '\n' +
+            '_If you believe this issue was closed wrongly, you may reopen it._'
 
-        await closeIssue(term, anticheatMessage);
+        await closeIssue(term, clientMessage);
         return;
     }
 
     for (const term of featureTerms) {
         if (checkTerm(issueText, term)) continue;
 
-        const featureMessage = `This issue is being automatically closed because it may mention request that are
-        impossible to make, associated with cheating/griefing, or fall outside the scope of this project (${term}).\n
-        \n
-        If you believe this issue was closed wrongly, you may reopen it.`;
+        const featureMessage =
+            `### This issue is being automatically closed because it may request this feature: (${term}).\n` +
+            'This feature is likely impossible to make, associated with cheating/griefing, or falls outside ' +
+            'the scope of this project. We do not plan on adding this feature.\n' +
+            '\n' +
+            '_If you believe this issue was closed wrongly, you may reopen it._'
 
         await closeIssue(term, featureMessage);
         return;
     }
 
     if (checkTerm(issueText, "old version")) {
-        const oldVersionMessage = `This issue is being automatically closed because it may request support for or
-        access to old versions of the client. Old versions can be found at https://meteorclient.com/archive, but 
-        you will not receive any support while using them.\n
-        \n
-        If you believe this issue was closed wrongly, you may reopen it.`;
+        const oldVersionMessage =
+            `### This issue is being automatically closed because it may mention old versions.\n` +
+            'Old versions of Meteor can be found at https://meteorclient.com/archive, but you will' +
+            'not receive support for any issues you encounter while using them.\n' +
+            '\n' +
+            '_If you believe this issue was closed wrongly, you may reopen it._'
 
         await closeIssue("old version", oldVersionMessage);
         return;
     }
 
     if (checkTerm(issueText, "forge")) {
-        const forgeMessage = `This issue is being automatically closed because it may request that Meteor be .
-        ported to Forge. Meteor is only a Fabric mod and does plan to be ported in the future.\n
-        \n
-        If you believe this issue was closed wrongly, you may reopen it.`;
+        const oldVersionMessage =
+            `### This issue is being automatically closed because it may request a Forge port.\n` +
+            'Meteor is a Fabric only mod and has no plans to port to Forge.\n' +
+            '\n' +
+            '_If you believe this issue was closed wrongly, you may reopen it._'
 
-        await closeIssue("forge", forgeMessage);
+        await closeIssue("forge", oldVersionMessage);
     }
 }
 
@@ -124,7 +130,7 @@ async function closeIssue(foundTerm, message) {
     // IDE for whatever reason can't find the rest property yippee
 
     try {
-        await octokit["rest"].issues.createComment({
+        await octokit['rest'].issues.createComment({
             owner,
             repo,
             issue_number: issueNumber,
@@ -137,7 +143,7 @@ async function closeIssue(foundTerm, message) {
     }
 
     try {
-        await octokit["rest"].issues.update({
+        await octokit['rest'].issues.update({
             owner,
             repo,
             issue_number: issueNumber,
