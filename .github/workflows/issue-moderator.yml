@@ -27,11 +27,6 @@ jobs:
         working-directory: .github/moderation
         run: npm install
 
-      - name: Generate Summary
-        run: node .github/moderation/issue_summary.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Check Banned Terms
         run: node .github/moderation/banned_terms.js
         env:

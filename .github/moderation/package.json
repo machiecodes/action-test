@@ -5,8 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "banned_terms": "node get_number.js",
-    "issue_summary": "node issue_summary.js"
+    "banned_terms": "node banned_terms.js"
   },
   "dependencies": {
     "@actions/core": "^1.11.1",
